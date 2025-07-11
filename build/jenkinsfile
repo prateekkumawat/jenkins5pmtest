@@ -14,15 +14,16 @@ pipeline {
             }
         }
 
-        stage("build Image"){
-            steps{
-                sh "docker build -t webapp:v1 ."
-            }
-        }
+        // stage("build Image"){
+        //    steps{
+        //        sh "docker build -t webapp:v1 ."
+        //    }
+        //}
 
         stage("Build Container"){
             steps{
-                sh "docker run -dit --name webapp -p 80:80 webapp:v1"
+                // sh "docker run -dit --name webapp -p 80:80 webapp:v1"
+                sh "docker-compose up -d"
             }
         }
     }
