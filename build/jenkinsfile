@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'day1', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+                git branch: 'Day1', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
             }
         }
 
