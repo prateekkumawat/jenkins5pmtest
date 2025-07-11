@@ -1,0 +1,29 @@
+pipeline {
+    agent {
+        lable 'cimachine'
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+    }
+
+    stages {
+        stage("App code Checkout"){
+            steps {
+                git branch: 'day1', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+            }
+        }
+
+        stage("build Image"){
+            steps{
+                sh "docker build -t webapp:v1 ."
+            }
+        }
+
+        stage("Build Container"){
+            steps{
+                sh "docker run -dit --name webapp -p 80:80 webapp:v1"
+            }
+        }
+    }
+}
