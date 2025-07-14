@@ -1,22 +1,23 @@
-pipeline {
+pipeline{
     agent {
         label 'cimachine'
     }
-    options {
-        timeout(time: 1, unit: 'HOURS')
-        buildDiscarder(logRotator(numToKeepStr: '3'))
-    }
 
     stages {
-        stage("App code Checkout"){
-            steps {
-                git branch: 'Day1', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+        stage("AppCode Checkout"){
+            steps{
+              git branch:'java', url:'https://github.com/prateekkumawat/jenkins5pmtest.git' 
             }
         }
-    stage("Build Container"){
+        stage("Build Image"){
             steps{
-                 sh "docker-compose up -d"
+                sh " docker build -t javaapp:latest . "
+            }
+        }
+        stage("Spin Container"){
+            steps{
+                sh " docker-compose up -d "
             }
         }
     }
-}    
+}
