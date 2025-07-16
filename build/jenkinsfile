@@ -23,8 +23,9 @@ pipeline {
               dir('src/') {
                 withSonarQubeEnv('sonar-server') {
                    sh ''' $SONNAR_SCANNER_HOME/bin/sonar-scanner \   
-                -Dsonar.projectKey=sonar-jenkins-integrated \
-                -Dsonar.projectName=sonar-jenkins-integrated '''  
+                   -Dsonar.projectKey=sonar-jenkins-integrated \
+                   -Dsonar.python.version=3.11 \
+                   -Dsonar.projectName=sonar-jenkins-integrated '''  
                 }
               }
             }
