@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        SONNAR_SCANNER_HOME = tools 'sonnar-scanner'
+        SONNAR_SCANNER_HOME = tool 'sonnar-scanner'
     }
 
     stages {
