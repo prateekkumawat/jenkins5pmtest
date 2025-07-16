@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        SONNAR_SCANNER_HOME = tool 'sonar-scanner'
+        SSHOME = tool 'sonar-scanner'
     }
 
     stages {
@@ -22,7 +22,7 @@ pipeline {
             steps{
               dir('src/') {
                 withSonarQubeEnv('sonar-server') {
-                   sh ''' $SONNAR_SCANNER_HOME/bin/sonar-scanner \   
+                   sh ''' $SSHOME/bin/sonar-scanner \   
                    -Dsonar.projectKey=sonar-jenkins-integrated \
                    -Dsonar.python.version=3.11 \
                    -Dsonar.projectName=sonar-jenkins-integrated '''  
