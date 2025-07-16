@@ -22,9 +22,9 @@ pipeline {
             steps{
               dir('src/') {
                 withSonarQubeEnv('sonar-server') {
-                   sh ''' $SONNAR_SCANNER_HOME/bin/sonar-scanner    
-                   -Dsonar.projectKey=sonar-jenkins-integrated \
-                   -Dsonar.projectName=sonar-jenkins-integrated '''  
+                   sh ''' $SONNAR_SCANNER_HOME/bin/sonar-scanner \   
+                -Dsonar.projectKey=sonar-jenkins-integrated \
+                -Dsonar.projectName=sonar-jenkins-integrated '''  
                 }
               }
             }
