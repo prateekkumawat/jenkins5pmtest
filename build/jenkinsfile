@@ -26,6 +26,7 @@ pipeline {
                    -Dsonar.projectKey=sonar-jenkins-integrated \
                    -Dsonar.projectName=sonar-jenkins-integrated '''  
                 }
+              }
             }
         }
 
