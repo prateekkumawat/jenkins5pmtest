@@ -7,16 +7,42 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '3'))
     }
 
+    environment {
+        SONNAR_SCANNER_HOME = tools 'sonnar-scanner'
+    }
+
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'Day1', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+                git branch: 'sonarintegrated', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
             }
         }
-    stage("Build Container"){
+
+        stage("Sonar Analysis"){
             steps{
-                 sh "docker-compose up -d"
+              dir('src/') {
+                withSonarQubeEnv('sonar-server') {
+                   sh ''' $SONNAR_SCANNER_HOME/bin/sonar-scanner    
+                   -Dsonar.projectKey=sonar-jenkins-integrated \
+                   -Dsonar.projectName=sonar-jenkins-integrated '''  
+                }
+            }
+        }
+
+        stage('QualityGate') {
+            steps {
+                script {
+                    dir('src/') {
+                        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                    }
+                }
+            }
+        }
+
+        stage("build Image"){
+            steps{
+                sh "docker build -t webapp:v1 ."
             }
         }
     }
-}    
+}
