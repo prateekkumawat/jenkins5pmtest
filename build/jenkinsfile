@@ -40,10 +40,20 @@ pipeline {
                 }
             }
         }
-
+        stage("Scan CODEFS"){
+            steps{
+                sh "trivy fs src/ >> /tmp/trivyscanfs.txt "
+            }
+        }
         stage("build Image"){
             steps{
                 sh "docker build -t webapp:v1 ."
+            }
+        }
+
+        stage("Scan Image Trivy"){
+            steps{
+                sh "trivy image webapp:v1 >> /tmp/trivyscan.txt "
             }
         }
     }
