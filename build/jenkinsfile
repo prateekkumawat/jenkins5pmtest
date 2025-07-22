@@ -9,12 +9,13 @@ pipeline {
 
     environment {
         SSHOME = tool 'sonar-scanner'
+        DOKCER_REGISTRY_CREDS = credentials('docker-creds')
     }
 
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'sonarintegrated', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+                git branch: 'kubernetes', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
             }
         }
 
@@ -23,9 +24,8 @@ pipeline {
               dir('src/') {
                 withSonarQubeEnv('sonar-server') {
                     sh ''' $SSHOME/bin/sonar-scanner \
-                    -Dsonar.projectKey=sonar-jenkins-integrated \
-                    -Dsonar.python.version=3.11 \
-                    -Dsonar.projectName=sonar-jenkins-integrated '''  
+                    -Dsonar.projectKey=villa-agency-project-ci \
+                    -Dsonar.projectName=villa-agency-project-ci '''  
                 }
               }
             }
@@ -47,13 +47,21 @@ pipeline {
         }
         stage("build Image"){
             steps{
-                sh "docker build -t webapp:v1 ."
+                sh "docker build -t prateekkumawat/vilaimage:${BUILD_NUMBER} ."
             }
         }
 
         stage("Scan Image Trivy"){
             steps{
-                sh "trivy image webapp:v1 >> /tmp/trivyscan.txt "
+                sh "trivy image  prateekkumawat/villaimage:${BUILD_NUMBER} >> /tmp/trivyscan.txt "
+            }
+        }
+
+        stage("Image Push to Registry"){
+            steps {
+                sh " docker login -u $DOKCER_REGISTRY_CREDS_USR -p $DOKCER_REGISTRY_CREDS_PSW "
+                sh " docker push prateekkumawat/villaimage:${BUILD_NUMBER} "
+                sh " docker rm -f prateekkumawat/villaimage:${BUILD_NUMBER} "
             }
         }
     }
