@@ -47,21 +47,22 @@ pipeline {
         }
         stage("build Image"){
             steps{
-                sh "docker build -t prateekkumawat/vilaimage:${BUILD_NUMBER} ."
+                sh "docker build -t vilaimage:${BUILD_NUMBER} ."
             }
         }
 
         stage("Scan Image Trivy"){
             steps{
-                sh "trivy image  prateekkumawat/villaimage:${BUILD_NUMBER} >> /tmp/trivyscan.txt "
+                sh "trivy image villaimage:${BUILD_NUMBER} >> /tmp/trivyscan.txt "
             }
         }
 
         stage("Image Push to Registry"){
             steps {
+                sh "docker tag -t villaimage:${BUILD_NUMBER} prateekkumawat/villaimage:${BUILD_NUMBER} "
                 sh " docker login -u $DOKCER_REGISTRY_CREDS_USR -p $DOKCER_REGISTRY_CREDS_PSW "
                 sh " docker push prateekkumawat/villaimage:${BUILD_NUMBER} "
-                sh " docker rm -f prateekkumawat/villaimage:${BUILD_NUMBER} "
+                sh " docker image rm -f prateekkumawat/villaimage:${BUILD_NUMBER} "
             }
         }
     }
