@@ -59,7 +59,7 @@ pipeline {
 
         stage("Image Push to Registry"){
             steps {
-                sh "docker tag -t villaimage:${BUILD_NUMBER} prateekkumawat/villaimage:${BUILD_NUMBER} "
+                sh "docker tag villaimage:${BUILD_NUMBER} prateekkumawat/villaimage:${BUILD_NUMBER} "
                 sh " docker login -u $DOKCER_REGISTRY_CREDS_USR -p $DOKCER_REGISTRY_CREDS_PSW "
                 sh " docker push prateekkumawat/villaimage:${BUILD_NUMBER} "
                 sh " docker image rm -f prateekkumawat/villaimage:${BUILD_NUMBER} "
