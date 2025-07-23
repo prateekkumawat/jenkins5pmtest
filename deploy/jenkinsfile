@@ -6,7 +6,10 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
         buildDiscarder(logRotator(numToKeepStr: '3'))
     }
-
+    environment {
+        // Path to the kubeconfig file
+        KUBECONFIG = "${WORKSPACE}/kubeconfig"
+    }
     stages {
         stage("App code Checkout"){
             steps {
