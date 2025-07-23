@@ -1,0 +1,29 @@
+pipeline {
+    agent {
+        label 'cimachine'
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+    }
+
+    stages {
+        stage("App code Checkout"){
+            steps {
+                git branch: 'kubernetes', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+            }
+        }
+
+        stage('Deploy pods') {
+            steps {
+                withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG_FILE')]) {
+                    sh '''
+                      kubectl apply -f kubernetes-deploy/namespace.yaml
+                      kubectl apply -f kubernetes-deploy/deployment.yaml
+                      kubectl apply -f kubernetes-deploy/service.yaml
+                    '''
+                }
+            }
+        }
+    }
+}            
