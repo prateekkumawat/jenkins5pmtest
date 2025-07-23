@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: villa-agency
-        image: prateekkumawat/villaimage:5
+        image: prateekkumawat/villaimage:6
         resources:
           requests:
             memory: "500Mi"
