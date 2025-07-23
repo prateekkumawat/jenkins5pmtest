@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: villa-agency-svc
-  namespae: villa
+  namespace: villa
   labels: 
     app: villa
     deploy: jenkins
