@@ -16,7 +16,9 @@ pipeline {
 
         stage('Deploy Ansible Playbook') {
             steps {
+              dir('ansible-project/'){  
                 sh ' ansible-playbook playbook.yaml '
+              } 
             }
         }
     }
