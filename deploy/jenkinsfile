@@ -6,28 +6,17 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
         buildDiscarder(logRotator(numToKeepStr: '3'))
     }
-    environment {
-        // Path to the kubeconfig file
-        KUBECONFIG = "${WORKSPACE}/kubeconfig"
-    }
+ 
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'kubernetes', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
+                git branch: 'ansible', url:'https://github.com/prateekkumawat/jenkins5pmtest.git'
             }
         }
 
-        stage('Deploy pods') {
+        stage('Deploy Ansible Playbook') {
             steps {
-                withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG_FILE')]) {
-                    sh '''
-                      cp $KUBECONFIG_FILE $KUBECONFIG
-                      chmod 600 $KUBECONFIG
-                      kubectl apply -f kubernetes-deploy/namespace.yaml
-                      kubectl apply -f kubernetes-deploy/deployment.yaml
-                      kubectl apply -f kubernetes-deploy/service.yaml
-                    '''
-                }
+                sh ' ansible-playbook playbook.yaml '
             }
         }
     }

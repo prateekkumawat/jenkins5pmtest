@@ -1,0 +1,20 @@
+---
+- name: Install and setup web application using Ansible Automation 
+  hosts: all 
+  tasks: 
+    
+    - name: Install httpd Package 
+      yum: 
+        name: httpd 
+        state: latest
+
+    - name: copy source in var/www/html 
+      copy: 
+        src: ./src/
+        dest: /var/www/html 
+        force: yes 
+
+    - name: start httpd service
+      service: 
+        name: httpd
+        state: started         
